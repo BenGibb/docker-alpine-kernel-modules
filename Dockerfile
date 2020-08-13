@@ -4,7 +4,7 @@
 #   docker build --build-arg KERNELVER=$(uname -r  | cut -d '-' -f 1) -t alpine-kernel-modules .
 #   docker run -it --rm --privileged alpine-kernel-modules modprobe vhci-hcd
 
-FROM alpine:3.4
+FROM alpine:edge
 MAINTAINER gw0 [http://gw.tnode.com/] <gw.2017@ena.one>
 
 # install alpine packages
@@ -20,11 +20,16 @@ RUN apk add --no-cache --update \
     sed \
     # tools
     ca-certificates \
-    wget
+    wget \
+    flex \
+    bison \
+    linux-headers \
+    openssl-dev \
+    elfutils-dev
 
 # download kernel sources
-ARG KERNELVER=4.9.4
-RUN wget -nv -P /srv https://www.kernel.org/pub/linux/kernel/v4.x/linux-$KERNELVER.tar.gz \
+ARG KERNELVER=5.4.56
+RUN wget -nv -P /srv https://www.kernel.org/pub/linux/kernel/v5.x/linux-$KERNELVER.tar.gz \
  && tar -C /srv -zxf /srv/linux-$KERNELVER.tar.gz \
  && rm -f /srv/linux-$KERNELVER.tar.gz
 
